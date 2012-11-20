@@ -10,22 +10,22 @@ namespace :deploy do
   end
 
   task :start, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    #with_server_role(:app) { unicorn.start }
+    CapistranoEvroneRecipes::Util.with_roles(self, :app) { unicorn.start }
     CapistranoEvroneRecipes::Util.with_roles(self, :worker) { foreman.start }
   end
 
   task :stop, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    #with_server_role(:app) { unicorn.stop }
+    CapistranoEvroneRecipes::Util.with_roles(self, :app) { unicorn.stop }
     CapistranoEvroneRecipes::Util.with_roles(self, :worker) { foreman.stop }
   end
 
   task :graceful_stop, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    #with_server_role(:app) { unicorn.graceful_stop }
+    CapistranoEvroneRecipes::Util.with_roles(self, :app) { unicorn.graceful_stop }
     CapistranoEvroneRecipes::Util.with_roles(self, :worker) { foreman.stop }
   end
 
   task :restart, :on_no_matching_servers => :continue, :except => {:no_release => true} do
-    #with_server_role(:app)    { unicorn.restart }
+    CapistranoEvroneRecipes::Util.with_roles(self, :app) { unicorn.restart }
     CapistranoEvroneRecipes::Util.with_roles(self, :worker) { foreman.restart }
   end
 end

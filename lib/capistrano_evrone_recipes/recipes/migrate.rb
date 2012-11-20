@@ -9,4 +9,4 @@ namespace :deploy do
   end
 end
 
-before "deploy:restart", "deploy:migrate"
+after "deploy:finalize_update", "deploy:migrate"

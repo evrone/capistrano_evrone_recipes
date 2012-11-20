@@ -1,3 +1,4 @@
+require 'logger'
 require File.dirname(__FILE__) + "/util"
 
 Capistrano::Configuration.instance(:must_exist).load do
@@ -16,4 +17,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   load "#{recipes_dir}/recipes/login.rb"
   load "#{recipes_dir}/recipes/migrate.rb"
   load "#{recipes_dir}/recipes/rails.rb"
+  load "#{recipes_dir}/recipes/unicorn.rb"
+  load "#{recipes_dir}/recipes/silent.rb" if ENV['CAP_SILENT']
 end

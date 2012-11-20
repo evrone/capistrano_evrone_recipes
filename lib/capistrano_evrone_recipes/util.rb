@@ -12,6 +12,7 @@ module CapistranoEvroneRecipes
           yield
         else
           cap.logger.info "skip because #{path} not changed"
+          $silent_stack_skip = true
         end
       end
 
@@ -26,6 +27,7 @@ module CapistranoEvroneRecipes
           yield
         else
           cap.logger.info "skip because #{path} not changed"
+          $silent_stack_skip = true
         end
       end
 

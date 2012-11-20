@@ -7,8 +7,16 @@ namespace :foreman do
 
   desc "Restart Procfile services"
   task :restart, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    restart = "(test -L previous && readlink previous | xargs rm -rf) ; rm -f current.new && ln -s #{fetch :foreman_services_path} current.new && rm -f previous && (test -L current && mv current previous) || true && mv current.new current"
-    run("cd #{deploy_to}/services && #{restart}")
+    cmd = <<-EOF
+    (test -L previous && readlink previous | xargs rm -rf) ;
+    rm -f current.new &&
+    ln -s #{fetch :foreman_services_path} current.new &&
+    rm -f previous &&
+    (test -L current && mv current previous) || true
+    && mv current.new current
+    EOF
+    cmd = cmd.gsub(/\n/, " ").gsub(/ +/, " ")
+    run("cd #{deploy_to}/services && #{cmd}")
   end
 
   desc "Stop services"
