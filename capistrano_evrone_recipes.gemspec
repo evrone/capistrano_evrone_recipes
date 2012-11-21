@@ -3,7 +3,7 @@ require "capistrano_evrone_recipes/version"
 
 Gem::Specification.new do |s|
   s.name     = "capistrano_evrone_recipes"
-  s.version  = CapistranoEvroneRecipes::Version
+  s.version  = CapistranoEvroneRecipes::VERSION
 
   s.author   = "Dmitry Galinsky"
   s.email    = "dima.exe@gmail.com"
@@ -12,7 +12,26 @@ Gem::Specification.new do |s|
 
   s.description = s.summary
 
-  s.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
+  s.files = [
+    "capistrano_evrone_recipes.gemspec",
+    "Gemfile",
+    "Gemfile.lock",
+    "lib/capistrano_evrone_recipes/capistrano.rb",
+    "lib/capistrano_evrone_recipes/recipes/assets.rb",
+    "lib/capistrano_evrone_recipes/recipes/crontab.rb",
+    "lib/capistrano_evrone_recipes/recipes/deploy.rb",
+    "lib/capistrano_evrone_recipes/recipes/foreman.rb",
+    "lib/capistrano_evrone_recipes/recipes/login.rb",
+    "lib/capistrano_evrone_recipes/recipes/migrate.rb",
+    "lib/capistrano_evrone_recipes/recipes/rails.rb",
+    "lib/capistrano_evrone_recipes/recipes/silent.rb",
+    "lib/capistrano_evrone_recipes/recipes/sphinx.rb",
+    "lib/capistrano_evrone_recipes/recipes/unicorn.rb",
+    "lib/capistrano_evrone_recipes/util.rb",
+    "lib/capistrano_evrone_recipes/version.rb",
+    "Rakefile",
+    "README.md"
+  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3

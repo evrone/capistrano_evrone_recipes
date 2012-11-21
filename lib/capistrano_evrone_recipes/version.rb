@@ -1,9 +1,9 @@
 module CapistranoEvroneRecipes
-  class Version
+  class VERSION
 
     MAJOR = 0
     MINOR = 1
-    PATCH = 2
+    PATCH = 3
 
     def self.to_s
       "#{MAJOR}.#{MINOR}.#{PATCH}"
