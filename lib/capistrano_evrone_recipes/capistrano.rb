@@ -8,6 +8,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   ssh_options[:forward_agent] = true
 
   set :bundle_cmd,       "rbenv exec bundle"
+  set :bundle_flags,     "--deployment --quiet --binstubs --shebang ruby-local-exec"
   set :rake,             -> { "#{bundle_cmd} exec rake" }
   set :keep_releases,    7
   set :scm,              "git"
