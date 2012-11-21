@@ -1,22 +1,40 @@
 $:.unshift File.expand_path("../lib", __FILE__)
 require "capistrano_evrone_recipes/version"
 
-Gem::Specification.new do |gem|
-  gem.name     = "capistrano_evrone_recipes"
-  gem.version  = CapistranoEvroneRecipes::Version
+Gem::Specification.new do |s|
+  s.name     = "capistrano_evrone_recipes"
+  s.version  = CapistranoEvroneRecipes::Version
 
-  gem.author   = "Dmitry Galinsky"
-  gem.email    = "dima.exe@gmail.com"
-  gem.homepage = "http://github.com/dima-exe/capistrano_evrone_recipes"
-  gem.summary  = "Capistrano recipes used in evrone company"
+  s.author   = "Dmitry Galinsky"
+  s.email    = "dima.exe@gmail.com"
+  s.homepage = "http://github.com/dima-exe/capistrano_evrone_recipes"
+  s.summary  = "Capistrano recipes used in evrone company"
 
-  gem.description = gem.summary
+  s.description = s.summary
 
-  gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
+  s.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
 
-  gem.add_dependency "whenever"
-  gem.add_dependency "foreman_export_runitu"
-  gem.add_dependency "capistrano", '>= 2.13.5'
-  gem.add_dependency "colored"
-  gem.add_dependency "unicorn"
+  if s.respond_to? :specification_version then
+    s.specification_version = 3
+
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<capistrano>, [">= 2.13.5"])
+      s.add_runtime_dependency(%q<colored>, [">= 0"])
+      s.add_runtime_dependency(%q<unicorn>, [">= 0"])
+      s.add_runtime_dependency(%q<foreman_export_runitu>, [">= 0"])
+      s.add_runtime_dependency(%q<whenever>, [">= 0"])
+    else
+      s.add_dependency(%q<capistrano>, [">= 2.13.5"])
+      s.add_dependency(%q<colored>, [">= 0"])
+      s.add_dependency(%q<unicorn>, [">= 0"])
+      s.add_dependency(%q<foreman_export_runitu>, [">= 0"])
+      s.add_dependency(%q<whenever>, [">= 0"])
+    end
+  else
+    s.add_dependency(%q<capistrano>, [">= 2.13.5"])
+    s.add_dependency(%q<colored>, [">= 0"])
+    s.add_dependency(%q<unicorn>, [">= 0"])
+    s.add_dependency(%q<foreman_export_runitu>, [">= 0"])
+    s.add_dependency(%q<whenever>, [">= 0"])
+  end
 end
