@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "foreman_export_runitu"
   gem.add_dependency "capistrano", '>= 2.13.5'
   gem.add_dependency "colored"
+  gem.add_dependency "unicorn"
 end
