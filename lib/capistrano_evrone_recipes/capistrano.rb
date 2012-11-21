@@ -7,15 +7,16 @@ Capistrano::Configuration.instance(:must_exist).load do
   default_run_options[:pty]   = true
   ssh_options[:forward_agent] = true
 
-  set :bundle_cmd,       "rbenv exec bundle"
-  set :bundle_flags,     "--deployment --quiet --binstubs --shebang ruby-local-exec"
-  set :rake,             -> { "#{bundle_cmd} exec rake" }
-  set :keep_releases,    7
-  set :scm,              "git"
-  set :user,             "deploy"
-  set :deploy_via,       :unshared_remote_cache
-  set :copy_exclude,     [".git"]
-  set :repository_cache, -> { "#{deploy_to}/shared/#{application}.git" }
+  set :bundle_cmd,                 "rbenv exec bundle"
+  set :bundle_flags,               "--deployment --quiet --binstubs --shebang ruby-local-exec"
+  set :rake,                       -> { "#{bundle_cmd} exec rake" }
+  set :keep_releases,              7
+  set :scm,                        "git"
+  set :user,                       "deploy"
+  set :deploy_via,                 :unshared_remote_cache
+  set :copy_exclude,               [".git"]
+  set :repository_cache,           -> { "#{deploy_to}/shared/#{application}.git" }
+  set :normalize_asset_timestamps, false
 
   load "deploy"
   require 'bundler/capistrano'

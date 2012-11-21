@@ -1,13 +1,23 @@
-_cset(:runit_export_path)   { "#{release_path}/var/services" }
+_cset(:runit_export_path)   { "#{latest_release}/var/services" }
 _cset(:runit_services_path) { "#{deploy_to}/services" }
 _cset(:runit_export_cmd)    { "#{fetch :bundle_cmd} exec foreman export runitu" }
-_cset(:runit_procfile)      { "#{release_path}/Procfile" }
+_cset(:runit_procfile)      { "#{latest_release}/Procfile" }
 _cset(:foreman_concurency)  { nil }
 
 namespace :runit do
 
   desc "Restart Procfile services"
   task :restart, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
+    current_link = capture("readlink #{runit_services_path}/current").to_s.strip
+    if current_link == runit_export_path
+      stop
+      start
+    else
+      relink
+    end
+  end
+
+  task :relink, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     cmd = <<-EOF
     (test -L previous && readlink previous | xargs rm -rf) ;
     rm -f current.new &&
@@ -23,7 +33,7 @@ namespace :runit do
   desc "Stop services"
   task :stop, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     cmd = "for i in `ls -1 #{runit_services_path}/current`; do"
-    cmd << " sv -w 10 down #{runit_services_path}/current/${i} ; done"
+    cmd << " sv -w 10 force-stop #{runit_services_path}/current/${i} ; done"
     run(cmd)
   end
 
@@ -46,4 +56,4 @@ EOF
   end
 end
 
-after "deploy:finalize_update", "foreman:export"
+after "deploy:finalize_update", "runit:export"
