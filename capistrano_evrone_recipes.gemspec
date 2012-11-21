@@ -12,26 +12,10 @@ Gem::Specification.new do |s|
 
   s.description = s.summary
 
-  s.files = [
-    "capistrano_evrone_recipes.gemspec",
-    "Gemfile",
-    "Gemfile.lock",
-    "lib/capistrano_evrone_recipes/capistrano.rb",
-    "lib/capistrano_evrone_recipes/recipes/assets.rb",
-    "lib/capistrano_evrone_recipes/recipes/crontab.rb",
-    "lib/capistrano_evrone_recipes/recipes/deploy.rb",
-    "lib/capistrano_evrone_recipes/recipes/foreman.rb",
-    "lib/capistrano_evrone_recipes/recipes/login.rb",
-    "lib/capistrano_evrone_recipes/recipes/migrate.rb",
-    "lib/capistrano_evrone_recipes/recipes/rails.rb",
-    "lib/capistrano_evrone_recipes/recipes/silent.rb",
-    "lib/capistrano_evrone_recipes/recipes/sphinx.rb",
-    "lib/capistrano_evrone_recipes/recipes/unicorn.rb",
-    "lib/capistrano_evrone_recipes/util.rb",
-    "lib/capistrano_evrone_recipes/version.rb",
-    "Rakefile",
-    "README.md"
-  ]
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+
+  s.require_paths = ["lib"]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
