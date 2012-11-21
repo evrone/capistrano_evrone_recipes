@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
 
   s.author   = "Dmitry Galinsky"
   s.email    = "dima.exe@gmail.com"
-  s.homepage = "http://github.com/dima-exe/capistrano_evrone_recipes"
+  s.homepage = "http://github.com/evrone/capistrano_evrone_recipes"
   s.summary  = "Capistrano recipes used in evrone company"
 
   s.description = s.summary
