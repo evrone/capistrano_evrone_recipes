@@ -5,6 +5,7 @@ logger.level = Capistrano::Logger::IMPORTANT
 STDOUT.sync
 
 $silent_stack      = []
+$silent_stack_tm   = []
 $silent_stack_cur  = nil
 $silent_stack_skip = nil
 
@@ -21,6 +22,8 @@ def format_silent(name, options = {})
 end
 
 on :before do
+  $silent_stack_tm.push Time.now.to_f
+
   name = current_task.fully_qualified_name
   if $silent_stack_cur && $silent_stack_cur == $silent_stack.last
     puts ""
@@ -37,9 +40,12 @@ end
 on :after do
   name = current_task.fully_qualified_name
   old = $silent_stack.pop
+  tm  = $silent_stack_tm.pop
+  tm = Time.now.to_f - tm
 
   spaces = $silent_stack.size
   rs = "DONE".green
+  rs += (" %0.2fs" % tm).to_s
 
   if $silent_stack_skip == true
     rs = "SKIP".yellow
