@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    capistrano_evrone_recipes (0.1.2)
+    capistrano_evrone_recipes (0.1.5)
       capistrano (>= 2.13.5)
       colored
       foreman_export_runitu

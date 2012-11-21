@@ -17,27 +17,9 @@ Gem::Specification.new do |s|
 
   s.require_paths = ["lib"]
 
-  if s.respond_to? :specification_version then
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<capistrano>, [">= 2.13.5"])
-      s.add_runtime_dependency(%q<colored>, [">= 0"])
-      s.add_runtime_dependency(%q<unicorn>, [">= 0"])
-      s.add_runtime_dependency(%q<foreman_export_runitu>, [">= 0"])
-      s.add_runtime_dependency(%q<whenever>, [">= 0"])
-    else
-      s.add_dependency(%q<capistrano>, [">= 2.13.5"])
-      s.add_dependency(%q<colored>, [">= 0"])
-      s.add_dependency(%q<unicorn>, [">= 0"])
-      s.add_dependency(%q<foreman_export_runitu>, [">= 0"])
-      s.add_dependency(%q<whenever>, [">= 0"])
-    end
-  else
-    s.add_dependency(%q<capistrano>, [">= 2.13.5"])
-    s.add_dependency(%q<colored>, [">= 0"])
-    s.add_dependency(%q<unicorn>, [">= 0"])
-    s.add_dependency(%q<foreman_export_runitu>, [">= 0"])
-    s.add_dependency(%q<whenever>, [">= 0"])
-  end
+  s.add_runtime_dependency("capistrano", [">= 2.13.5"])
+  s.add_runtime_dependency("colored", [">= 0"])
+  s.add_runtime_dependency("unicorn", [">= 0"])
+  s.add_runtime_dependency("foreman_export_runitu", [">= 0"])
+  s.add_runtime_dependency("whenever", [">= 0"])
 end
