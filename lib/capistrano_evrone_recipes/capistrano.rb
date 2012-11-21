@@ -9,8 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   set :bundle_cmd,       "rbenv exec bundle"
   set :bundle_flags,     "--deployment --quiet --binstubs --shebang ruby-local-exec"
-  set :rake,             -> { "bin/rake" }
-  set :rails_cmd,        "bin/rails"
+  set :rake,             -> { "#{bundle_cmd} exec rake" }
   set :keep_releases,    7
   set :scm,              "git"
   set :user,             "deploy"
