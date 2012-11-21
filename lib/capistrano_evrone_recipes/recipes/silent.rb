@@ -10,7 +10,7 @@ $silent_stack_skip = nil
 
 def format_silent(name, options = {})
   s = name.size
-  i = 40 - s
+  i = (70 - s).abs
   name = name.bold if options[:bold]
   print(name + (" " * i))
 end
@@ -22,7 +22,11 @@ on :before do
   end
   $silent_stack.push name
   $silent_stack_cur = name
-  format_silent(("  " * ($silent_stack.size - 1)) + "* #{name}", :bold => true)
+
+  roles = current_task.instance_eval{ @options[:roles] }
+
+  name = "#{name} [#{[roles].flatten.map(&:to_s).join(',')}]" if roles
+  format_silent(("  " * ($silent_stack.size - 1)) + "* #{name}")
 end
 
 on :after do

@@ -2,6 +2,8 @@ require 'logger'
 require File.dirname(__FILE__) + "/util"
 
 Capistrano::Configuration.instance(:must_exist).load do
+  logger.level = Capistrano::Logger::DEBUG
+
   default_run_options[:pty]   = true
   ssh_options[:forward_agent] = true
 
@@ -18,5 +20,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   load "#{recipes_dir}/recipes/migrate.rb"
   load "#{recipes_dir}/recipes/rails.rb"
   load "#{recipes_dir}/recipes/unicorn.rb"
-  load "#{recipes_dir}/recipes/silent.rb" if ENV['CAP_SILENT']
+  load "#{recipes_dir}/recipes/assets.rb"
+  load "#{recipes_dir}/recipes/silent.rb" if ENV['CAP_SILENT_MODE']
 end
