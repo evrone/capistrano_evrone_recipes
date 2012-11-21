@@ -1,30 +1,20 @@
 $:.unshift File.expand_path("../lib", __FILE__)
-require "foreman/version"
+require "capistrano_evrone_recipes/version"
 
 Gem::Specification.new do |gem|
-  gem.name     = "capistrano-evrone-ext"
-  gem.version  = Foreman::VERSION
+  gem.name     = "capistrano_evrone_recipes"
+  gem.version  = CapistranoEvroneRecipes::Version
 
-  gem.author   = "David Dollar"
-  gem.email    = "ddollar@gmail.com"
-  gem.homepage = "http://github.com/ddollar/foreman"
-  gem.summary  = "Process manager for applications with multiple components"
+  gem.author   = "Dmitry Galinsky"
+  gem.email    = "dima.exe@gmail.com"
+  gem.homepage = "http://github.com/dima-exe/capistrano_evrone_recipes"
+  gem.summary  = "Capistrano recipes used in evrone company"
 
   gem.description = gem.summary
 
-  gem.executables = "foreman"
   gem.files = Dir["**/*"].select { |d| d =~ %r{^(README|bin/|data/|ext/|lib/|spec/|test/)} }
-  gem.files << "man/foreman.1"
 
-  gem.add_dependency 'thor', '>= 0.13.6'
-
-  if ENV["PLATFORM"] == "java"
-    gem.add_dependency "posix-spawn", "~> 0.3.6"
-    gem.platform = Gem::Platform.new("java")
-  end
-
-  if ENV["PLATFORM"] == "mingw32"
-    gem.add_dependency "win32console", "~> 1.3.0"
-    gem.platform = Gem::Platform.new("mingw32")
-  end
+  gem.add_dependency "whenever"
+  gem.add_dependency "foreman_export_runitu"
+  gem.add_dependency "capistrano", '>= 2.13.5'
 end
