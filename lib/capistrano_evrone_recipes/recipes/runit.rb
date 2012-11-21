@@ -1,35 +1,36 @@
-_cset(:foreman_services_path) { "#{deploy_to}/services/#{release_name}" }
-_cset(:foreman_cmd)           { "#{fetch :bundle_cmd} exec foreman export runitu" }
-_cset(:foreman_procfile)      { "#{release_path}/Procfile" }
-_cset(:foreman_concurency)    { nil }
+_cset(:runit_export_path)   { "#{release_path}/var/services" }
+_cset(:runit_services_path) { "#{deploy_to}/services" }
+_cset(:runit_export_cmd)    { "#{fetch :bundle_cmd} exec foreman export runitu" }
+_cset(:runit_procfile)      { "#{release_path}/Procfile" }
+_cset(:foreman_concurency)  { nil }
 
-namespace :foreman do
+namespace :runit do
 
   desc "Restart Procfile services"
   task :restart, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     cmd = <<-EOF
     (test -L previous && readlink previous | xargs rm -rf) ;
     rm -f current.new &&
-    ln -s #{fetch :foreman_services_path} current.new &&
+    ln -s #{runit_export_path} current.new &&
     rm -f previous &&
     (test -L current && mv current previous) || true
     && mv current.new current
     EOF
     cmd = cmd.gsub(/\n/, " ").gsub(/ +/, " ")
-    run("cd #{deploy_to}/services && #{cmd}")
+    run("cd #{runit_services_path} && #{cmd}")
   end
 
   desc "Stop services"
   task :stop, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    cmd = "for i in `ls -1 #{deploy_to}/services/current`; do"
-    cmd << " sv -w 10 down #{deploy_to}/services/current/${i} ; done"
+    cmd = "for i in `ls -1 #{runit_services_path}/current`; do"
+    cmd << " sv -w 10 down #{runit_services_path}/current/${i} ; done"
     run(cmd)
   end
 
   desc "Start services"
   task :start, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    cmd = "for i in `ls -1 #{deploy_to}/services/current`; do"
-    cmd << " sv -v -w 10 up #{deploy_to}/services/current/${i} ; done"
+    cmd = "for i in `ls -1 #{runit_services_path}/current`; do"
+    cmd << " sv -v -w 10 up #{runit_services_path}/current/${i} ; done"
     run(cmd)
   end
 
@@ -41,7 +42,7 @@ EOF
     put(env, "#{release_path}/.env")
 
     conc = fetch(:foreman_concurency) ? "-c #{fetch :foreman_concurency}" : ""
-    run "cd #{release_path} && #{fetch :foreman_cmd} #{fetch :foreman_services_path} -e #{release_path}/.env -l #{shared_path}/log -f #{fetch :foreman_procfile} --root=#{release_path} -a #{application} #{conc} > /dev/null"
+    run "cd #{release_path} && #{runit_export_cmd} #{runit_export_path} -e #{release_path}/.env -l #{shared_path}/log -f #{runit_procfile} --root=#{release_path} -a #{application} #{conc} > /dev/null"
   end
 end
 

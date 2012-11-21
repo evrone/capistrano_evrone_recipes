@@ -23,7 +23,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   recipes_dir = File.dirname(File.expand_path(__FILE__))
 
   load "#{recipes_dir}/recipes/crontab.rb"
-  load "#{recipes_dir}/recipes/foreman.rb"
+  load "#{recipes_dir}/recipes/runit.rb"
   load "#{recipes_dir}/recipes/deploy.rb"
   load "#{recipes_dir}/recipes/login.rb"
   load "#{recipes_dir}/recipes/migrate.rb"
