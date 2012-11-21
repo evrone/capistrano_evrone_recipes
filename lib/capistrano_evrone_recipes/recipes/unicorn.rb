@@ -1,4 +1,4 @@
-_cset(:unicorn_binary) { "#{fetch :bundle_cmd} exec unicorn" }
+_cset(:unicorn_binary) { "bin/unicorn" }
 _cset(:unicorn_config) { "#{fetch :current_path}/config/unicorn.rb" }
 _cset(:unicorn_pid)    { "#{fetch :current_path}/tmp/pids/unicorn.pid" }
 
