@@ -8,7 +8,7 @@ namespace :runit do
 
   desc "Restart Procfile services"
   task :restart, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
-    current_link = capture("readlink #{runit_services_path}/current").to_s.strip
+    current_link = capture("readlink #{runit_services_path}/current || echo").to_s.strip
     if current_link == runit_export_path
       stop
       start
