@@ -4,7 +4,7 @@ We deploy a lot of Rails applications and our developers have to solve similar p
 
 Recipe use:
 
-* [`foreman`][forman] + [`foreman_export_runitu`][runitu] to generate runit scripts with the Procfile
+* [`foreman`][foreman] + [`foreman_export_runitu`][runitu] to generate runit scripts with the Procfile
 * [`whenever`][whenever] to generate crontab
 * [`unicorn`][unicorn] to run the application
 
