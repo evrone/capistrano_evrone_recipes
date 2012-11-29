@@ -17,7 +17,7 @@ namespace :deploy do
       for efficiency. If you customize the assets path prefix, override the \
       :assets_prefix variable to match.
     DESC
-    task :symlink, :roles => assets_role, :except => { :no_release => true } do
+    task :symlink, :on_no_matching_servers => :continue, :roles => assets_role, :except => { :no_release => true } do
       run <<-CMD
         rm -rf #{latest_release}/public/#{assets_prefix} &&
         mkdir -p #{latest_release}/public &&
@@ -36,7 +36,7 @@ namespace :deploy do
         set :rails_env, "production"
         set :asset_env, "RAILS_GROUPS=assets"
     DESC
-    task :precompile, :roles => assets_role, :except => { :no_release => true } do
+    task :precompile, :on_no_matching_servers => :continue, :roles => assets_role, :except => { :no_release => true } do
       CapistranoEvroneRecipes::Util.ensure_changed_remote_dirs(self, "app/assets") do
         run "cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:precompile"
       end
@@ -53,7 +53,7 @@ namespace :deploy do
         set :rails_env, "production"
         set :asset_env, "RAILS_GROUPS=assets"
     DESC
-    task :clean, :roles => assets_role, :except => { :no_release => true } do
+    task :clean, :on_no_matching_servers => :continue, :roles => assets_role, :except => { :no_release => true } do
       run "cd #{latest_release} && #{rake} RAILS_ENV=#{rails_env} #{asset_env} assets:clean"
     end
   end
