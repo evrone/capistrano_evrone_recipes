@@ -5,18 +5,11 @@ _cset(:unicorn_pid)    { "#{fetch :current_path}/tmp/pids/unicorn.pid" }
 namespace :unicorn do
   desc "Restart unicorn"
   task :restart, :roles => :app, :on_no_matching_servers => :continue, :except => {:no_release => true} do
+    upid = fetch :unicorn_pid
     cmd = <<-EOF
-if [ -f #{fetch :unicorn_pid} ];
-then
-  kill -s USR2 `cat #{fetch :unicorn_pid}` &&
-  TIMES=1 &&
-  echo 'Please wait unicorn restart...' &&
-  sleep 1 &&
-  (while [ -e #{fetch :unicorn_pid}.oldbin ] ; do sleep 2; TIMES=$TIMES+2; done) &&
-  echo "Unicorn restart time: $TIMES sec" ;
-fi
+if [ -f #{upid} ] ; then kill -s USR2 `cat #{upid}` ;fi && a=1;d=2; echo 'Please wait unicorn restart...'; sleep 1 && while [ -e #{upid}.oldbin ] ; do sleep 2; a=$(expr $a + $d);  done; echo "Unicorn restart time: $a sec"
 EOF
-    run cmd.gsub(/\n/, " ").gsub(/ +/, " ")
+    run cmd
   end
 
   desc "Fast restart unicorn"

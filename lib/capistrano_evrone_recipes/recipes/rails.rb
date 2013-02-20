@@ -4,7 +4,8 @@ namespace :rails do
   task :console, :roles => :app do
     server = find_servers_for_task(current_task).first
     if server
-      exec "ssh -A #{server} -t 'cd #{current_path} && #{fetch :bundle_cmd} exec script/rails console #{rails_env}'"
+      cmd = "ssh -l #{user} -A #{server} -t 'cd #{current_path} && #{fetch :bundle_cmd} exec rails console #{rails_env}'"
+      puts cmd
     end
   end
 
@@ -13,7 +14,7 @@ namespace :rails do
   task :dbconsole, :roles => :db, :only => { :primary => true } do
     server = find_servers_for_task(current_task).first
     if server
-      exec "ssh -A #{server} -t 'cd #{current_path} && #{fetch :bundle_cmd} exec script/rails dbconsole #{rails_env}'"
+      exec "ssh -l #{user} -A #{server} -t 'cd #{current_path} && #{fetch :bundle_cmd} exec rails dbconsole #{rails_env}'"
     end
   end
 end

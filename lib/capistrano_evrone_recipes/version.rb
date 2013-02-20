@@ -3,7 +3,7 @@ module CapistranoEvroneRecipes
 
     MAJOR = 0
     MINOR = 1
-    PATCH = 10
+    PATCH = 11
 
     def self.to_s
       "#{MAJOR}.#{MINOR}.#{PATCH}"
