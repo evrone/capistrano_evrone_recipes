@@ -33,13 +33,12 @@ module CapistranoEvroneRecipes
 
 
       def with_roles(cap, role)
-        original, hosts = ENV["HOSTS"], cap.find_servers(:roles => role).map{|i| i.host }.join(",")
-        return if hosts.empty?
+        original = ENV['ROLES']
         begin
-          ENV["HOSTS"] = hosts
+          ENV["ROLES"] = role
           yield
         ensure
-          ENV["HOSTS"] = original
+          ENV["ROLES"] = original
         end
       end
     end

@@ -17,6 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :copy_exclude,               [".git"]
   set :repository_cache,           -> { "#{deploy_to}/shared/#{application}.git" }
   set :normalize_asset_timestamps, false
+  set :use_sudo,                   false
 
   load "deploy"
   require 'bundler/capistrano'
