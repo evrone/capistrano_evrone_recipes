@@ -24,13 +24,15 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   recipes_dir = File.dirname(File.expand_path(__FILE__))
 
-  load "#{recipes_dir}/recipes/crontab.rb"
+  disabled_modules = fetch(:disabled_features, [])
+
+  load "#{recipes_dir}/recipes/crontab.rb" unless disabled_modules.include?(:crontab)
   load "#{recipes_dir}/recipes/runit.rb"
   load "#{recipes_dir}/recipes/deploy.rb"
   load "#{recipes_dir}/recipes/login.rb"
-  load "#{recipes_dir}/recipes/migrate.rb"
+  load "#{recipes_dir}/recipes/migrate.rb" unless disabled_modules.include?(:migrate)
   load "#{recipes_dir}/recipes/rails.rb"
-  load "#{recipes_dir}/recipes/unicorn.rb"
+  load "#{recipes_dir}/recipes/unicorn.rb" unless disabled_modules.include?(:unicorn)
   load "#{recipes_dir}/recipes/assets.rb"
   load "#{recipes_dir}/recipes/silent.rb" if ENV['CAP_SILENT_MODE']
 end
