@@ -75,3 +75,6 @@ namespace :runit do
 end
 
 after "deploy:finalize_update", "runit:export"
+after "deploy:start", "runit:start"
+after "deploy:stop", "runit:stop"
+after "deploy:restart", "runit:restart"

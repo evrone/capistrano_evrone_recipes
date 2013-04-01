@@ -12,11 +12,6 @@ EOF
     run cmd
   end
 
-  desc "Fast restart unicorn"
-  task :fast_restart, :roles => :app, :on_no_matching_servers => :continue, :except => {:no_release => true} do
-    run "test -f #{fetch :unicorn_pid} ] && kill -s USR2 `cat #{fetch :unicorn_pid}`"
-  end
-
   desc "Start unicorn"
   task :start, :roles => :app, :on_no_matching_servers => :continue, :except => {:no_release => true} do
     run "cd #{current_path} && env #{fetch :unicorn_binary} -c #{fetch :unicorn_config} -E #{rails_env} -D"
@@ -26,9 +21,8 @@ EOF
   task :stop, :roles => :app, :on_no_matching_servers => :continue, :except => {:no_release => true} do
     run "test -f #{fetch :unicorn_pid} && kill `cat #{fetch :unicorn_pid}`"
   end
-
-  desc "Graceful stop unicorn"
-  task :graceful_stop, :on_no_matching_servers => :continue, :roles => :app, :except => { :no_release => true } do
-    run "test -f #{fetch :unicorn_pid} && kill -s QUIT `cat #{fetch :unicorn_pid}`"
-  end
 end
+
+after "deploy:start", "unicorn:start"
+after "deploy:stop", "unicorn:stop"
+after "deploy:restart", "unicorn:restart"
