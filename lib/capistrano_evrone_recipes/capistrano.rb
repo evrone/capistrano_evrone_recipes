@@ -2,13 +2,13 @@ require 'logger'
 require File.dirname(__FILE__) + "/util"
 
 Capistrano::Configuration.instance(:must_exist).load do
-  logger.level = Capistrano::Logger::DEBUG
+  logger.level = Capistrano::Logger::INFO
 
   default_run_options[:pty]   = true
   ssh_options[:forward_agent] = true
 
   set :bundle_cmd,                 "rbenv exec bundle"
-  set :bundle_flags,               "--deployment --quiet --binstubs --shebang ruby-local-exec"
+  set :bundle_flags,               "--deployment --quiet"
   set :rake,                       -> { "#{bundle_cmd} exec rake" }
   set :keep_releases,              7
   set :scm,                        "git"

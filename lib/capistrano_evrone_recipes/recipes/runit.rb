@@ -11,14 +11,14 @@ namespace :runit do
     if find_servers_for_task(current_task).any?
       cmd = %Q{
         if [ -d #{runit_export_path} ] ; then
-          echo "Update services" ;
+          echo "----> Updating services" ;
           rm -rf #{runit_services_path}/* ;
           sync ;
           cp -r #{runit_export_path}/* #{runit_services_path}/ ;
           sync ;
           rm -rf #{runit_export_path} ;
         else
-          echo "Restart services" ;
+          echo "----> Restart services" ;
           sv t #{runit_services_path}/* ;
         fi
       }.compact
@@ -29,18 +29,14 @@ namespace :runit do
   desc "Stop services"
   task :stop, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     if find_servers_for_task(current_task).any?
-      cmd = "for i in `ls -1 #{runit_services_path}/`; do"
-      cmd << " sv -w 10 force-stop #{runit_services_path}/${i} ; done"
-      run(cmd)
+      run "sv -w 10 force-stop #{runit_services_path}/*"
     end
   end
 
   desc "Start services"
   task :start, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     if find_servers_for_task(current_task).any?
-      cmd = "for i in `ls -1 #{runit_services_path}/`; do"
-      cmd << " sv -v -w 10 up #{runit_services_path}/${i} ; done"
-      run(cmd)
+      run "sv -w 10 up #{runit_services_path}/*"
     end
   end
 
@@ -49,17 +45,18 @@ namespace :runit do
     if find_servers_for_task(current_task).any?
       CapistranoEvroneRecipes::Util.ensure_changed_remote_files(self, fetch(:runit_procfile)) do
         env = %{ RAILS_ENV=#{rails_env} }.strip + "\n"
-        put(env, "#{runit_services_path}/.env")
+        put(env, "#{latest_release}/.env")
 
         c = fetch(:foreman_concurency) ? "-c #{fetch :foreman_concurency}" : ""
         cmd = %{
           cd #{latest_release} &&
           #{runit_export_cmd} #{runit_export_path}
-            -e #{runit_services_path}/.env
+            -e #{latest_release}/.env
             -l #{shared_path}/log
             -f #{latest_release}/#{runit_procfile}
             --root=#{current_path}
-            -a #{application} #{c} > /dev/null
+            -a #{application} #{c} > /dev/null &&
+            echo "----> Export #{runit_procfile}"
         }.compact
         run cmd
 

@@ -2,44 +2,44 @@ module CapistranoEvroneRecipes
   class Util
     class << self
       def ensure_changed_remote_dirs(cap, path)
-        diff = if cap.previous_release
-                 -> { cap.capture("diff -r #{cap.previous_release}/#{path} #{cap.current_release}/#{path} | wc -l").to_i }
-               else
-                 -> { 1 }
-               end
-        force = ENV["FORCE"].to_i
-        if force > 0 || diff.call > 0
+        if ENV['FORCE'] || !cap.previous_release
           yield
-        else
-          cap.logger.info "skip because #{path} not changed"
-          $silent_stack_skip = true
+          return
+        end
+        cap.run changed?(cap, path, recursive: true) do |ch, st, data|
+          Capistrano::Configuration.default_io_proc.call(ch,st,data)
+          unless data.include?(" is not changed")
+            yield
+          end
         end
       end
 
       def ensure_changed_remote_files(cap, path)
-        diff = if cap.previous_release
-                 -> { cap.capture("diff -r #{cap.previous_release}/#{path} #{cap.current_release}/#{path} | wc -l").to_i }
-               else
-                 -> { 1 }
-               end
-        force = ENV["FORCE"].to_i
-        if force > 0 || diff.call > 0
+        if ENV['FORCE'] || !cap.previous_release
           yield
-        else
-          cap.logger.info "skip because #{path} not changed"
-          $silent_stack_skip = true
+          return
+        end
+        cap.run changed?(cap, path) do |ch, st, data|
+          Capistrano::Configuration.default_io_proc.call(ch,st,data)
+          unless data.include?(" is not changed")
+            yield
+          end
         end
       end
 
-
-      def with_roles(cap, role)
-        original = ENV['ROLES']
-        begin
-          ENV["ROLES"] = role.to_s
-          yield
-        ensure
-          ENV["ROLES"] = original
-        end
+      def changed?(cap, path, options = {})
+        r = options[:recursive] ? "-r" : ""
+        %{
+          diff #{r} #{cap.previous_release}/#{path} #{cap.latest_release}/#{path} |
+            wc -l |
+            grep -q -v 0 ;
+          ST=$? ;
+          if [ $ST -eq 0 ] ; then
+            echo '----> #{path} changed' ;
+          else
+            echo '----> #{path} is not changed' ;
+          fi
+        }.compact
       end
     end
   end
