@@ -36,7 +36,7 @@ namespace :runit do
   desc "Start services"
   task :start, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     if find_servers_for_task(current_task).any?
-      run "sv -w 10 up #{runit_services_path}/*"
+      run "sv -v start #{runit_services_path}/*"
     end
   end
 

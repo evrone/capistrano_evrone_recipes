@@ -3,7 +3,7 @@ namespace :deploy do
   task :symlink_configs do
     s = "cd #{shared_path}/config && "
     s << "for i in `find . -type f | sed 's/^\\.\\///'` ; do "
-    s << "echo \"----> ${i}\" ;"
+    s << "echo \"create current/config/${i}\" ;"
     s << "rm -f #{release_path}/config/${i} ;"
     s << "ln -snf #{shared_path}/config/${i} #{release_path}/config/${i} ; done"
     run s
