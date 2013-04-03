@@ -19,7 +19,7 @@ namespace :runit do
           rm -rf #{runit_export_path} ;
         else
           echo "----> Restart services" ;
-          sv t #{runit_services_path}/* ;
+          test $(ls -1 #{runit_services_path} | wc -l) -eq 0 || sv t #{runit_services_path}/* ;
         fi
       }.compact
       run cmd
