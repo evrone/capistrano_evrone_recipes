@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency("capistrano", [">= 2.13.5"])
+  s.add_runtime_dependency("capistrano", ["= 2.15.5"])
   s.add_runtime_dependency("colored", [">= 0"])
   s.add_runtime_dependency("foreman", [">= 0"])
   s.add_runtime_dependency("foreman_export_runitu", [">= 0"])

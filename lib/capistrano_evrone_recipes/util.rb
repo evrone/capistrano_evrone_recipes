@@ -30,14 +30,14 @@ module CapistranoEvroneRecipes
       def changed?(cap, path, options = {})
         r = options[:recursive] ? "-r" : ""
         %{
-          diff #{r} #{cap.previous_release}/#{path} #{cap.latest_release}/#{path} |
-            wc -l |
-            grep -q -v 0 ;
+          test -e #{cap.previous_release}/#{path} &&
+            diff #{r} #{cap.previous_release}/#{path} #{cap.latest_release}/#{path} > /dev/null
+            ;
           ST=$? ;
           if [ $ST -eq 0 ] ; then
-            echo '----> #{path} changed' ;
+            echo -n '----> #{path} is not changed' ;
           else
-            echo '----> #{path} is not changed' ;
+            echo -n '----> #{path} is changed' ;
           fi
         }.compact
       end

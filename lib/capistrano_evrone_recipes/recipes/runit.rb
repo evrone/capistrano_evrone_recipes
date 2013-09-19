@@ -56,7 +56,7 @@ namespace :runit do
             -f #{latest_release}/#{runit_procfile}
             --root=#{current_path}
             -a #{application} #{c} > /dev/null &&
-            echo "----> Export #{runit_procfile}"
+            echo -n "----> Export #{runit_procfile}"
         }.compact
         run cmd
 
