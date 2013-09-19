@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency("capistrano", [">= 2.13.5"])
   s.add_runtime_dependency("colored", [">= 0"])
-  s.add_runtime_dependency("unicorn", [">= 0"])
+  s.add_runtime_dependency("foreman", [">= 0"])
   s.add_runtime_dependency("foreman_export_runitu", [">= 0"])
   s.add_runtime_dependency("whenever", [">= 0"])
 end
