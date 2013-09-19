@@ -2,7 +2,7 @@ set(:whenever_command)   { "#{fetch(:bundle_cmd)} exec whenever" }
 set(:whenever_variables) {"\"environment=#{rails_env}&path=#{current_path}&output=#{shared_path}/log/crontab.log\"" }
 set(:whenever_roles)     { :crontab }
 
-require "whenever/capistrano/recipes"
+require "whenever/capistrano"
 
 namespace :crontab do
   desc "Generate crontab from config/whenever.rb"
@@ -22,4 +22,4 @@ namespace :crontab do
   end
 end
 
-after "deploy:finalize_update", 'crontab:generate'
+after "deploy:restart", 'crontab:generate'

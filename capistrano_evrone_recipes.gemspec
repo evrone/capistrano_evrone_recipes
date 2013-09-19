@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("colored", [">= 0"])
   s.add_runtime_dependency("foreman", [">= 0"])
   s.add_runtime_dependency("foreman_export_runitu", [">= 0"])
-  s.add_runtime_dependency("whenever", [">= 0"])
+  s.add_runtime_dependency("whenever", ["~> 0.7.3"])
 end
