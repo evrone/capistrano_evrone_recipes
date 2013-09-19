@@ -24,7 +24,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   recipes_dir = File.dirname(File.expand_path(__FILE__))
 
-  disabled_modules = fetch(:disabled_features, [])
+  #disabled_modules = fetch(:disabled_features, [])
 
   load "#{recipes_dir}/recipes/crontab.rb"
   load "#{recipes_dir}/recipes/runit.rb"
