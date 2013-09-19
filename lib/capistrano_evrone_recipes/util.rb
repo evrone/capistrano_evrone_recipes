@@ -2,29 +2,11 @@ module CapistranoEvroneRecipes
   class Util
     class << self
       def ensure_changed_remote_dirs(cap, path)
-        if ENV['FORCE'] || !cap.previous_release
-          yield
-          return
-        end
-        cap.run changed?(cap, path, recursive: true) do |ch, st, data|
-          Capistrano::Configuration.default_io_proc.call(ch,st,data)
-          unless data.include?(" is not changed")
-            yield
-          end
-        end
+        yield
       end
 
       def ensure_changed_remote_files(cap, path)
-        if ENV['FORCE'] || !cap.previous_release
-          yield
-          return
-        end
-        cap.run changed?(cap, path) do |ch, st, data|
-          Capistrano::Configuration.default_io_proc.call(ch,st,data)
-          unless data.include?(" is not changed")
-            yield
-          end
-        end
+        yield
       end
 
       def changed?(cap, path, options = {})
