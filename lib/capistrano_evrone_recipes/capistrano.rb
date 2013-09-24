@@ -1,4 +1,3 @@
-require 'logger'
 require File.dirname(__FILE__) + "/util"
 
 Capistrano::Configuration.instance(:must_exist).load do

@@ -3,6 +3,7 @@ _cset(:runit_services_path) { "#{deploy_to}/services" }
 _cset(:runit_export_cmd)    { "#{fetch :bundle_cmd} exec foreman export runitu" }
 _cset(:runit_procfile)      { "Procfile" }
 _cset(:foreman_concurency)  { nil }
+_cset(:runit_restart_cmd)   { "sv -v t $(pwd)/*" }
 
 namespace :runit do
 
@@ -11,15 +12,16 @@ namespace :runit do
     if find_servers_for_task(current_task).any?
       cmd = %Q{
         if [ -d #{runit_export_path} ] ; then
-          echo "----> Updating services" ;
+          echo -n "----> Update services" ;
           rm -rf #{runit_services_path}/* ;
           sync ;
           cp -r #{runit_export_path}/* #{runit_services_path}/ ;
           sync ;
           rm -rf #{runit_export_path} ;
         else
-          echo "----> Restart services" ;
-          test $(ls -1 #{runit_services_path} | wc -l) -eq 0 || sv t #{runit_services_path}/* ;
+          echo -n "----> Restart services" ;
+          test $(ls -1 #{runit_services_path} | wc -l) -eq 0 ||
+            (cd #{fetch :runit_services_path} && #{fetch :runit_restart_cmd, "/bin/true"}) ;
         fi
       }.compact
       run cmd
@@ -43,12 +45,16 @@ namespace :runit do
   desc "Export Procfile"
   task :export, :roles => :worker, :on_no_matching_servers => :continue, :except => { :no_release => true } do
     if find_servers_for_task(current_task).any?
-      CapistranoEvroneRecipes::Util.ensure_changed_remote_files(self, fetch(:runit_procfile)) do
-        env = %{ RAILS_ENV=#{rails_env} }.strip + "\n"
-        put(env, "#{latest_release}/.env")
+      env = %{ RAILS_ENV=#{rails_env} }.strip + "\n"
+      put(env, "#{latest_release}/.env")
 
-        c = fetch(:foreman_concurency) ? "-c #{fetch :foreman_concurency}" : ""
-        cmd = %{
+      c = fetch(:foreman_concurency) ? "-c #{fetch :foreman_concurency}" : ""
+      diff = ENV['FORCE'] ?
+        %{ /bin/false } :
+        %{ diff -q #{previous_release}/#{runit_procfile} #{latest_release}/#{runit_procfile} > /dev/null }
+      cmd = %{
+        #{diff} || (
+          echo -n "----> Export #{runit_procfile}" ;
           cd #{latest_release} &&
           #{runit_export_cmd} #{runit_export_path}
             -e #{latest_release}/.env
@@ -56,17 +62,13 @@ namespace :runit do
             -f #{latest_release}/#{runit_procfile}
             --root=#{current_path}
             -a #{application} #{c} > /dev/null &&
-            echo -n "----> Export #{runit_procfile}"
-        }.compact
-        run cmd
 
-        cmd = %{
-          for i in $(ls #{runit_export_path}/); do
-            sed -i 's|#{runit_export_path}|#{runit_services_path}|g' #{runit_export_path}/${i}/run ;
-          done
-        }.compact
-        run cmd
-      end
+            for i in $(ls #{runit_export_path}/); do
+              sed -i 's|#{runit_export_path}|#{runit_services_path}|g' #{runit_export_path}/${i}/run ;
+            done
+         )
+      }.compact
+      run cmd
     end
   end
 end
