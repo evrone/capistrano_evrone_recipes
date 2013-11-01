@@ -3,7 +3,8 @@ _cset(:runit_services_path) { "#{deploy_to}/services" }
 _cset(:runit_export_cmd)    { "#{fetch :bundle_cmd} exec foreman export runitu" }
 _cset(:runit_procfile)      { "Procfile" }
 _cset(:foreman_concurency)  { nil }
-_cset(:runit_restart_cmd)   { "sv -v t $(pwd)/*" }
+_cset(:runit_restart_timeout) { 10 }
+_cset(:runit_restart_cmd)   { "sv -w #{fetch :runit_restart_timeout, 10} -v t $(pwd)/*" }
 
 namespace :runit do
 
