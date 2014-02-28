@@ -52,7 +52,7 @@ namespace :runit do
       c = fetch(:foreman_concurency) ? "-c #{fetch :foreman_concurency}" : ""
       diff = ENV['FORCE'] ?
         %{ /bin/false } :
-        %{ diff -q #{previous_release}/#{runit_procfile} #{latest_release}/#{runit_procfile} > /dev/null }
+        %{ test -f  #{previous_release}/#{runit_procfile} && diff -q #{previous_release}/#{runit_procfile} #{latest_release}/#{runit_procfile} > /dev/null }
       cmd = %{
         #{diff} || (
           echo -n "----> Export #{runit_procfile}" ;
